@@ -1,0 +1,3 @@
+# WpfOnDotNetCoreSample
+
+.Net CoreでWPFするやつ
