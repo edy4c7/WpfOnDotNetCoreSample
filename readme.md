@@ -1,3 +1,4 @@
 # WpfOnDotNetCoreSample
 
-.Net CoreでWPFするやつ
+.Net CoreでWPFするやつ  
+ストップウォッチです。
