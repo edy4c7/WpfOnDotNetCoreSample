@@ -1,13 +1,11 @@
+using System;
+using System.Reactive.Linq;
+using System.Threading;
 using Moq;
 using NUnit.Framework;
+using Reactive.Bindings.Extensions;
 using WpfOnDotNetCoreSample.Models;
 using Infrastructures = WpfOnDotNetCoreSample.Models.Infrastructures;
-using System;
-using Reactive.Bindings.Extensions;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using System.ComponentModel;
 
 namespace WpfOnDotNetCoreSample.Test.Models
 {

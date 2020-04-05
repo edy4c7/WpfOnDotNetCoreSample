@@ -1,15 +1,9 @@
-using Moq;
-using NUnit.Framework;
-using WpfOnDotNetCoreSample.Models;
-using Infrastructures = WpfOnDotNetCoreSample.Models.Infrastructures;
 using System;
-using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Threading;
-using System.ComponentModel;
+using NUnit.Framework;
+using Reactive.Bindings.Extensions;
 using WpfOnDotNetCoreSample.ViewModels;
-using System.Windows.Input;
 
 namespace WpfOnDotNetCoreSample.Test.ViewModels
 {
