@@ -49,5 +49,23 @@ namespace WpfOnDotNetCoreSample.Test.ViewModels
 				Assert.IsFalse(are.WaitOne(10));
 			}
 		}
+
+		[Test]
+		public void TestResetCommand()
+		{
+			using (var vm = new MainWindowViewModel())
+			using (var are = new AutoResetEvent(false))
+			{
+				Assert.IsTrue(vm.ResetCommand.CanExecute());
+
+				vm.Ellapsed.ObserveProperty(x => x.Value, false)
+					.Subscribe(_ => are.Set());
+				vm.ResetCommand.Execute();
+
+				are.WaitOne(10);
+
+				Assert.IsFalse(are.WaitOne(10));
+			}
+		}
 	}
 }

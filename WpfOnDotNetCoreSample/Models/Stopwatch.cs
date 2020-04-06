@@ -39,6 +39,7 @@ namespace WpfOnDotNetCoreSample.Models
 		{
 			stopwatch.Reset();
 			subscription?.Dispose();
+			RaisePropertyChanged(nameof(Ellapsed));
 			RaisePropertyChanged(nameof(IsRunning));
 		}
 

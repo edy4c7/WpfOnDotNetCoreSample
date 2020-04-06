@@ -17,6 +17,8 @@ namespace WpfOnDotNetCoreSample.ViewModels
 
 		public ReactiveCommand StopCommand { get; }
 
+		public ReactiveCommand ResetCommand { get; }
+
 		public MainWindowViewModel()
 		{
 			Ellapsed = stopwatch.ObserveProperty(x => x.Ellapsed)
@@ -30,6 +32,9 @@ namespace WpfOnDotNetCoreSample.ViewModels
 			StopCommand = stopwatch.ObserveProperty(x => x.IsRunning)
 				.ToReactiveCommand();
 			StopCommand.Subscribe(() => stopwatch.Stop());
+
+			ResetCommand = new ReactiveCommand();
+			ResetCommand.Subscribe(() => stopwatch.Reset());
 		}
 
 		public void Initialize()

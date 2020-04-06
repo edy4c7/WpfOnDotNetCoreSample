@@ -49,6 +49,8 @@ namespace WpfOnDotNetCoreSample.Test.Models
 				sw.ObserveProperty(x => x.Ellapsed, false)
 					.Subscribe(_ => are.Set());
 
+				sw.Start();
+				are.WaitOne(10);
 				sw.Stop();
 
 				Assert.IsTrue(called);
@@ -68,14 +70,14 @@ namespace WpfOnDotNetCoreSample.Test.Models
 			{
 				sw.ObserveProperty(x => x.Ellapsed, false)
 					.Subscribe(_ => are.Set());
-				sw.Start();
 
+				sw.Start();
+				are.WaitOne(10);
 				sw.Reset();
 
-				sw.Stop();
-
 				Assert.IsTrue(called);
-				Assert.IsFalse(are.WaitOne(10));
+				Assert.IsTrue(are.WaitOne(10));
+				Assert.AreEqual(TimeSpan.Zero, sw.Ellapsed);
 			}
 		}
 
