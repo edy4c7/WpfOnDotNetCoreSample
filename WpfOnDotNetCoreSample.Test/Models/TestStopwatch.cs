@@ -57,6 +57,29 @@ namespace WpfOnDotNetCoreSample.Test.Models
 		}
 
 		[Test]
+		public void TestReset()
+		{
+			var mock = new Mock<Infrastructures.IStopwatch>();
+			var called = false;
+			mock.Setup(m => m.Reset()).Callback(() => called = true);
+
+			using (var sw = new Stopwatch(mock.Object))
+			using (var are = new AutoResetEvent(false))
+			{
+				sw.ObserveProperty(x => x.Ellapsed, false)
+					.Subscribe(_ => are.Set());
+				sw.Start();
+
+				sw.Reset();
+
+				sw.Stop();
+
+				Assert.IsTrue(called);
+				Assert.IsFalse(are.WaitOne(10));
+			}
+		}
+
+		[Test]
 		public void TestIsRunning()
 		{
 			var mock = new Mock<Infrastructures.IStopwatch>();

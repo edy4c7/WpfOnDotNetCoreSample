@@ -34,6 +34,13 @@ namespace WpfOnDotNetCoreSample.Models
 			subscription?.Dispose();
 			RaisePropertyChanged(nameof(IsRunning));
 		}
+		
+		public void Reset()
+		{
+			stopwatch.Reset();
+			subscription?.Dispose();
+			RaisePropertyChanged(nameof(IsRunning));
+		}
 
 		#region IDisposable Support
 		private bool isDisposed = false; // 重複する呼び出しを検出するには
