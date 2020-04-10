@@ -22,19 +22,22 @@ namespace WpfOnDotNetCoreSample.ViewModels
 		public MainWindowViewModel()
 		{
 			Ellapsed = stopwatch.ObserveProperty(x => x.Ellapsed)
-				.ToReadOnlyReactiveProperty();
+				.ToReadOnlyReactiveProperty()
+				.AddTo(CompositeDisposable);
 
 			StartCommand = stopwatch.ObserveProperty(x => x.IsRunning)
 				.Inverse()
-				.ToReactiveCommand();
-			StartCommand.Subscribe(() => stopwatch.Start());
+				.ToReactiveCommand()
+				.AddTo(CompositeDisposable);
+			StartCommand.Subscribe(() => stopwatch.Start()).AddTo(CompositeDisposable);
 
 			StopCommand = stopwatch.ObserveProperty(x => x.IsRunning)
-				.ToReactiveCommand();
-			StopCommand.Subscribe(() => stopwatch.Stop());
+				.ToReactiveCommand()
+				.AddTo(CompositeDisposable);
+			StopCommand.Subscribe(() => stopwatch.Stop()).AddTo(CompositeDisposable);
 
-			ResetCommand = new ReactiveCommand();
-			ResetCommand.Subscribe(() => stopwatch.Reset());
+			ResetCommand = new ReactiveCommand().AddTo(CompositeDisposable);
+			ResetCommand.Subscribe(() => stopwatch.Reset()).AddTo(CompositeDisposable);
 		}
 
 		public void Initialize()
