@@ -1,5 +1,6 @@
 ﻿using System;
 using Livet;
+using MicroResolver;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using WpfOnDotNetCoreSample.Models;
@@ -9,7 +10,7 @@ namespace WpfOnDotNetCoreSample.ViewModels
 	public class MainWindowViewModel : ViewModel
 	{
 		// Some useful code snippets for ViewModel are defined as l*(llcom, llcomn, lvcomm, lsprop, etc...).
-		private Stopwatch stopwatch = new Stopwatch(new Models.Infrastructures.Stopwatch());
+		private IStopwatchService service;
 		
 		public ReadOnlyReactiveProperty<TimeSpan> Ellapsed { get; }
 		
@@ -19,25 +20,28 @@ namespace WpfOnDotNetCoreSample.ViewModels
 
 		public ReactiveCommand ResetCommand { get; }
 
-		public MainWindowViewModel()
+		[Inject]
+		public MainWindowViewModel(IStopwatchService service)
 		{
-			Ellapsed = stopwatch.ObserveProperty(x => x.Ellapsed)
+			this.service = service;
+
+			Ellapsed = this.service.ObserveProperty(x => x.Ellapsed)
 				.ToReadOnlyReactiveProperty()
 				.AddTo(CompositeDisposable);
 
-			StartCommand = stopwatch.ObserveProperty(x => x.IsRunning)
+			StartCommand = this.service.ObserveProperty(x => x.IsRunning)
 				.Inverse()
 				.ToReactiveCommand()
 				.AddTo(CompositeDisposable);
-			StartCommand.Subscribe(() => stopwatch.Start()).AddTo(CompositeDisposable);
+			StartCommand.Subscribe(() => this.service.Start()).AddTo(CompositeDisposable);
 
-			StopCommand = stopwatch.ObserveProperty(x => x.IsRunning)
+			StopCommand = this.service.ObserveProperty(x => x.IsRunning)
 				.ToReactiveCommand()
 				.AddTo(CompositeDisposable);
-			StopCommand.Subscribe(() => stopwatch.Stop()).AddTo(CompositeDisposable);
+			StopCommand.Subscribe(() => this.service.Stop()).AddTo(CompositeDisposable);
 
 			ResetCommand = new ReactiveCommand().AddTo(CompositeDisposable);
-			ResetCommand.Subscribe(() => stopwatch.Reset()).AddTo(CompositeDisposable);
+			ResetCommand.Subscribe(() => this.service.Reset()).AddTo(CompositeDisposable);
 		}
 
 		public void Initialize()

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Livet;
+using MicroResolver;
 using WpfOnDotNetCoreSample.Models.Infrastructures;
 
 namespace WpfOnDotNetCoreSample.Models
 {
-	public class Stopwatch : NotificationObject, IDisposable
+	public class StopwatchService : NotificationObject, IDisposable, IStopwatchService
 	{
 		private IStopwatch stopwatch;
 
@@ -15,7 +16,8 @@ namespace WpfOnDotNetCoreSample.Models
 
 		public TimeSpan Ellapsed => stopwatch.Elapsed;
 
-		public Stopwatch(IStopwatch stopwatch)
+		[Inject]
+		public StopwatchService(IStopwatch stopwatch)
 		{
 			this.stopwatch = stopwatch;
 		}
@@ -34,7 +36,7 @@ namespace WpfOnDotNetCoreSample.Models
 			subscription?.Dispose();
 			RaisePropertyChanged(nameof(IsRunning));
 		}
-		
+
 		public void Reset()
 		{
 			stopwatch.Reset();

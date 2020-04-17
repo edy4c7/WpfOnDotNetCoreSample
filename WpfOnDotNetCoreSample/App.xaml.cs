@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 
 using Livet;
+using WpfOnDotNetCoreSample.ObjectResolvers;
 
 namespace WpfOnDotNetCoreSample
 {
 	public partial class App : Application
 	{
+		static App()
+		{
+			ObjectResolver.Instance.Compile();
+		}
+
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			DispatcherHelper.UIDispatcher = Dispatcher;

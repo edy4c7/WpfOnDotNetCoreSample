@@ -1,8 +1,11 @@
 using System;
+using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Threading;
+using Moq;
 using NUnit.Framework;
 using Reactive.Bindings.Extensions;
+using WpfOnDotNetCoreSample.Models;
 using WpfOnDotNetCoreSample.ViewModels;
 
 namespace WpfOnDotNetCoreSample.Test.ViewModels
@@ -17,7 +20,17 @@ namespace WpfOnDotNetCoreSample.Test.ViewModels
 		[Test]
 		public void TestStartCommand()
 		{
-			using (var vm = new MainWindowViewModel())
+			var mock = new Mock<IStopwatchService>();
+			mock.Setup(m => m.Start())
+				.Callback(() =>
+				{
+					mock.Setup(m => m.Ellapsed).Returns(TimeSpan.FromMilliseconds(10));
+					mock.Raise(m => m.PropertyChanged += null, new PropertyChangedEventArgs("Ellapsed"));
+					mock.Setup(m => m.IsRunning).Returns(true);
+					mock.Raise(m => m.PropertyChanged += null, new PropertyChangedEventArgs("IsRunning"));
+				});
+
+			using (var vm = new MainWindowViewModel(mock.Object))
 			using (var are = new AutoResetEvent(false))
 			{
 				vm.Ellapsed.ObserveProperty(x => x.Value, false)
@@ -32,7 +45,17 @@ namespace WpfOnDotNetCoreSample.Test.ViewModels
 		[Test]
 		public void TestStopCommand()
 		{
-			using (var vm = new MainWindowViewModel())
+			var mock = new Mock<IStopwatchService>();
+			mock.Setup(m => m.Start())
+				.Callback(() =>
+				{
+					mock.Setup(m => m.Ellapsed).Returns(TimeSpan.FromMilliseconds(10));
+					mock.Raise(m => m.PropertyChanged += null, new PropertyChangedEventArgs("Ellapsed"));
+					mock.Setup(m => m.IsRunning).Returns(true);
+					mock.Raise(m => m.PropertyChanged += null, new PropertyChangedEventArgs("IsRunning"));
+				});
+
+			using (var vm = new MainWindowViewModel(mock.Object))
 			using (var are = new AutoResetEvent(false))
 			{
 				Assert.IsFalse(vm.StopCommand.CanExecute());
@@ -53,7 +76,9 @@ namespace WpfOnDotNetCoreSample.Test.ViewModels
 		[Test]
 		public void TestResetCommand()
 		{
-			using (var vm = new MainWindowViewModel())
+			var mock = new Mock<IStopwatchService>();
+
+			using (var vm = new MainWindowViewModel(mock.Object))
 			using (var are = new AutoResetEvent(false))
 			{
 				Assert.IsTrue(vm.ResetCommand.CanExecute());

@@ -9,7 +9,7 @@ using Infrastructures = WpfOnDotNetCoreSample.Models.Infrastructures;
 
 namespace WpfOnDotNetCoreSample.Test.Models
 {
-	public class TestStopwatch
+	public class TestStopwatchService
 	{
 		[SetUp]
 		public void Setup()
@@ -23,7 +23,7 @@ namespace WpfOnDotNetCoreSample.Test.Models
 			var called = false;
 			mock.Setup(m => m.Start()).Callback(() => called = true);
 
-			using (var sw = new Stopwatch(mock.Object))
+			using (var sw = new StopwatchService(mock.Object))
 			using (var are = new AutoResetEvent(false))
 			{
 				sw.ObserveProperty(x => x.Ellapsed, false)
@@ -43,7 +43,7 @@ namespace WpfOnDotNetCoreSample.Test.Models
 			var called = false;
 			mock.Setup(m => m.Stop()).Callback(() => called = true);
 
-			using (var sw = new Stopwatch(mock.Object))
+			using (var sw = new StopwatchService(mock.Object))
 			using (var are = new AutoResetEvent(false))
 			{
 				sw.ObserveProperty(x => x.Ellapsed, false)
@@ -65,7 +65,7 @@ namespace WpfOnDotNetCoreSample.Test.Models
 			var called = false;
 			mock.Setup(m => m.Reset()).Callback(() => called = true);
 
-			using (var sw = new Stopwatch(mock.Object))
+			using (var sw = new StopwatchService(mock.Object))
 			using (var are = new AutoResetEvent(false))
 			{
 				sw.ObserveProperty(x => x.Ellapsed, false)
@@ -88,7 +88,7 @@ namespace WpfOnDotNetCoreSample.Test.Models
 			var called = false;
 			mock.Setup(m => m.IsRunning).Callback(() => called = true);
 
-			using (var sw = new Stopwatch(mock.Object))
+			using (var sw = new StopwatchService(mock.Object))
 			using (var are = new AutoResetEvent(false))
 			{
 				sw.ObserveProperty(x => x.IsRunning, false)
@@ -112,7 +112,7 @@ namespace WpfOnDotNetCoreSample.Test.Models
 			var called = false;
 			mock.Setup(m => m.Elapsed).Callback(() => called = true);
 
-			using (var sw = new Stopwatch(mock.Object))
+			using (var sw = new StopwatchService(mock.Object))
 			{
 				var ellapsed = sw.Ellapsed;
 				Assert.IsTrue(called);
