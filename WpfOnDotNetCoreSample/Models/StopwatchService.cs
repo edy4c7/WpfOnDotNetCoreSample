@@ -25,7 +25,7 @@ namespace WpfOnDotNetCoreSample.Models
 		public void Start()
 		{
 			stopwatch.Start();
-			subscription = Observable.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromMilliseconds(10))
+			subscription = Observable.Timer(TimeSpan.Zero, TimeSpan.FromMilliseconds(10))
 				.Subscribe(_ => RaisePropertyChanged(nameof(Ellapsed)));
 			RaisePropertyChanged(nameof(IsRunning));
 		}
