@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
 using Livet;
 using MicroResolver;
@@ -15,6 +17,10 @@ namespace WpfOnDotNetCoreSample.Models
 		public bool IsRunning => stopwatch.IsRunning;
 
 		public TimeSpan Ellapsed => stopwatch.Elapsed;
+
+		private ObservableCollection<TimeSpan> _LapTimes = new ObservableCollection<TimeSpan>();
+
+		public ObservableCollection<TimeSpan> LapTimes => _LapTimes;
 
 		[Inject]
 		public StopwatchService(IStopwatch stopwatch)
@@ -33,6 +39,7 @@ namespace WpfOnDotNetCoreSample.Models
 		public void Stop()
 		{
 			stopwatch.Stop();
+			Lap();
 			subscription?.Dispose();
 			RaisePropertyChanged(nameof(IsRunning));
 		}
@@ -40,9 +47,18 @@ namespace WpfOnDotNetCoreSample.Models
 		public void Reset()
 		{
 			stopwatch.Reset();
+			LapTimes.Clear();
 			subscription?.Dispose();
 			RaisePropertyChanged(nameof(Ellapsed));
 			RaisePropertyChanged(nameof(IsRunning));
+		}
+
+		public void Lap()
+		{
+			var total = LapTimes.Count != 0
+				? LapTimes.Aggregate((total, t) => total + t)
+				: TimeSpan.Zero;
+			LapTimes.Add(Ellapsed - total);
 		}
 
 		#region IDisposable Support

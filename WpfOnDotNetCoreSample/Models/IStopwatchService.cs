@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace WpfOnDotNetCoreSample.Models
@@ -6,11 +7,13 @@ namespace WpfOnDotNetCoreSample.Models
 	public interface IStopwatchService : INotifyPropertyChanged
 	{
 		TimeSpan Ellapsed { get; }
+		ObservableCollection<TimeSpan> LapTimes { get; }
 		bool IsRunning { get; }
 
 		void Dispose();
 		void Reset();
 		void Start();
 		void Stop();
+		void Lap();
 	}
 }

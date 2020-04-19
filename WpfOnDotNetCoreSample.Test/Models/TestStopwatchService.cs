@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using Moq;
@@ -59,6 +60,31 @@ namespace WpfOnDotNetCoreSample.Test.Models
 		}
 
 		[Test]
+		public void TestLap()
+		{
+			var mock = new Mock<Infrastructures.IStopwatch>();
+
+			using (var sw = new StopwatchService(mock.Object))
+			{
+				sw.Start();
+
+				mock.Setup(m => m.Elapsed).Returns(TimeSpan.FromMilliseconds(10));
+				sw.Lap();
+				mock.Setup(m => m.Elapsed).Returns(TimeSpan.FromMilliseconds(30));
+				sw.Lap();
+				mock.Setup(m => m.Elapsed).Returns(TimeSpan.FromMilliseconds(60));
+				sw.Lap();
+				mock.Setup(m => m.Elapsed).Returns(TimeSpan.FromMilliseconds(100));
+				sw.Stop();
+
+				Assert.AreEqual(10, sw.LapTimes[0].TotalMilliseconds);
+				Assert.AreEqual(20, sw.LapTimes[1].TotalMilliseconds);
+				Assert.AreEqual(30, sw.LapTimes[2].TotalMilliseconds);
+				Assert.AreEqual(40, sw.LapTimes[3].TotalMilliseconds);
+			}
+		}
+
+		[Test]
 		public void TestReset()
 		{
 			var mock = new Mock<Infrastructures.IStopwatch>();
@@ -72,12 +98,16 @@ namespace WpfOnDotNetCoreSample.Test.Models
 					.Subscribe(_ => are.Set());
 
 				sw.Start();
+				sw.Lap();
+				sw.Lap();
+				sw.Lap();
 				are.WaitOne(10);
 				sw.Reset();
 
 				Assert.IsTrue(called);
 				Assert.IsTrue(are.WaitOne(10));
 				Assert.AreEqual(TimeSpan.Zero, sw.Ellapsed);
+				Assert.AreEqual(0, sw.LapTimes.Count);
 			}
 		}
 

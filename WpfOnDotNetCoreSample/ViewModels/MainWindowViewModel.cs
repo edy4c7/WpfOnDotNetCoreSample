@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Livet;
 using MicroResolver;
 using Reactive.Bindings;
@@ -13,12 +14,16 @@ namespace WpfOnDotNetCoreSample.ViewModels
 		private IStopwatchService service;
 		
 		public ReadOnlyReactiveProperty<TimeSpan> Ellapsed { get; }
+
+		public ReadOnlyReactiveCollection<LapTimeViewModel> LapTimes { get; }
 		
 		public ReactiveCommand StartCommand { get; }
 
 		public ReactiveCommand StopCommand { get; }
 
 		public ReactiveCommand ResetCommand { get; }
+
+		public ReactiveCommand LapCommand { get; }
 
 		[Inject]
 		public MainWindowViewModel(IStopwatchService service)
@@ -28,6 +33,9 @@ namespace WpfOnDotNetCoreSample.ViewModels
 			Ellapsed = this.service.ObserveProperty(x => x.Ellapsed)
 				.ToReadOnlyReactiveProperty()
 				.AddTo(CompositeDisposable);
+
+			LapTimes = this.service.LapTimes
+				?.ToReadOnlyReactiveCollection(t => new LapTimeViewModel(this.service.LapTimes.Count, t));
 
 			StartCommand = this.service.ObserveProperty(x => x.IsRunning)
 				.Inverse()
@@ -42,6 +50,11 @@ namespace WpfOnDotNetCoreSample.ViewModels
 
 			ResetCommand = new ReactiveCommand().AddTo(CompositeDisposable);
 			ResetCommand.Subscribe(() => this.service.Reset()).AddTo(CompositeDisposable);
+
+			LapCommand = this.service.ObserveProperty(x => x.IsRunning)
+				.ToReactiveCommand()
+				.AddTo(CompositeDisposable);
+			LapCommand.Subscribe(() => this.service.Lap()).AddTo(CompositeDisposable);
 		}
 
 		public void Initialize()
