@@ -39,19 +39,19 @@ namespace WpfOnDotNetCoreSample.Models
 		public void Stop()
 		{
 			stopwatch.Stop();
-			RaisePropertyChanged(nameof(Ellapsed));
-			Lap();
 			subscription?.Dispose();
 			RaisePropertyChanged(nameof(IsRunning));
+			RaisePropertyChanged(nameof(Ellapsed));
+			Lap();
 		}
 
 		public void Reset()
 		{
 			stopwatch.Reset();
-			LapTimes.Clear();
 			subscription?.Dispose();
-			RaisePropertyChanged(nameof(Ellapsed));
 			RaisePropertyChanged(nameof(IsRunning));
+			RaisePropertyChanged(nameof(Ellapsed));
+			LapTimes.Clear();
 		}
 
 		public void Lap()
