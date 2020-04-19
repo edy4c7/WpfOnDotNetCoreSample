@@ -55,6 +55,7 @@ namespace WpfOnDotNetCoreSample.Test.Models
 				sw.Stop();
 
 				Assert.IsTrue(called);
+				are.WaitOne(10);
 				Assert.IsFalse(are.WaitOne(10));
 			}
 		}

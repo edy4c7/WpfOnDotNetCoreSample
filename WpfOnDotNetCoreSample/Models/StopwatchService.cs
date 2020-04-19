@@ -39,6 +39,7 @@ namespace WpfOnDotNetCoreSample.Models
 		public void Stop()
 		{
 			stopwatch.Stop();
+			RaisePropertyChanged(nameof(Ellapsed));
 			Lap();
 			subscription?.Dispose();
 			RaisePropertyChanged(nameof(IsRunning));
@@ -55,10 +56,11 @@ namespace WpfOnDotNetCoreSample.Models
 
 		public void Lap()
 		{
+			var elapsed = Ellapsed;
 			var total = LapTimes.Count != 0
 				? LapTimes.Aggregate((total, t) => total + t)
 				: TimeSpan.Zero;
-			LapTimes.Add(Ellapsed - total);
+			LapTimes.Add(elapsed - total);
 		}
 
 		#region IDisposable Support
