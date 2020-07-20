@@ -1,5 +1,3 @@
 # WpfOnDotNetCoreSample
 
-.Net CoreでWPFするやつ。  
-ストップウォッチです。  
-(※ .Net CoreでWPFするサンプルを示すのが目的なのであまり精度は出てません、悪しからず。)
+Moved to https://github.com/edy4c7/WpfSamples/tree/master/StopWatch
